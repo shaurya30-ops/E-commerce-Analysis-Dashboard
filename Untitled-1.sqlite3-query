@@ -1,0 +1,42 @@
+-- database: ./ecommerce.db
+
+SELECT * FROM Orders;
+SELECT * FROM Customers LIMIT 10;
+SELECT * FROM Orders LIMIT 10;
+SELECT count(*) FROM Orders;
+SELECT DISTINCT customer_state FROM Customers;
+SELECT
+p.product_category_name,
+count(oi.product_id) AS total_sold
+FROM OrderItems oi
+JOIN Products p ON oi.product_id = p.product_id
+GROUP BY p.product_category_name
+ORDER BY total_sold DESC
+LIMIT 10;
+SELECT count(*)
+FROM Customers
+WHERE customer_id IS NULL;
+SELECT product_id, count(*) AS duplicate_count
+FROM Products
+GROUP BY product_id
+HAVING count(*)>1;
+SELECT * FROM Products
+WHERE product_id = '02HHGHzbG7T5';
+DELETE FROM Products
+WHERE rowid NOT IN (SELECT min(rowid) FROM Products GROUP BY product_id);
+SELECT order_id, COUNT(*)
+FROM Orders
+GROUP BY order_id
+HAVING COUNT(*) > 1;
+SELECT
+    p.product_category_name,
+    SUM(oi.price) AS total_revenue
+FROM
+    OrderItems oi
+JOIN
+    Products p ON oi.product_id = p.product_id
+GROUP BY
+    p.product_category_name
+ORDER BY
+    total_revenue DESC
+LIMIT 5;
